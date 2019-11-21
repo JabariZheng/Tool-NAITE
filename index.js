@@ -18,6 +18,21 @@
         },
     }
 
+    // 实现 extend 方法
+
+    NAITE.extend = NAITE.prototype.extend = function (options) {
+
+        var target = this;
+
+        for (let name in options) {
+
+            target[name] = options[name].method;
+
+        };
+
+        return target
+    }
+
 
     // 搜索方法（未完成，后续开发）
     NAITE.search = function (text) {
@@ -27,6 +42,14 @@
         console.log(allNames);
 
     }
+
+    // NAITE.prototype.extend({
+
+    // });
+
+    // NAITE.extend({
+
+    // });
 
     BOOT.J = NAITE;
 
