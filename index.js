@@ -102,7 +102,11 @@
                                 };
                                 recursionFor(args[i]);
                             } else if (argsForItemType === "[object Number]") {
-                                continue;
+                                if (JSON.stringify(args[i]) === "null") {
+                                    result = false;
+                                } else {
+                                    continue;
+                                }
                             } else {
                                 result = false;
                             };
@@ -131,9 +135,12 @@
 
                         // 判断是否都为数字（提升体验，提示哪一位是非数字）
                         for (var i = 0; i < args.length; i++) {
+                            if (Object.prototype.toString.call(args[i]) === "[object String]") {
+                                args[i] = args[i] == "" ? args[i] = 0 : parseFloat(args[i]);
+                            };
                             if (!this.judgeNumber(args[i])) {
-                                throw "arguments[" + (i) + "]: " + args[i] + " is not number";
-                            }
+                                throw "arguments[" + (i) + "] is not number";
+                            };
                         };
 
                         // 获取小数点位数（10的倍数取值）
@@ -144,7 +151,7 @@
                                 pointLength = args[i].toString().length;
                             } else if (args[i].toString().length > pointLength) {
                                 pointLength = args[i].toString().length;
-                            }
+                            };
                         };
 
                         args = args.map(item => item = 10 ** pointLength * item);
@@ -152,11 +159,11 @@
                         // 计算结果
                         var result = 0;
 
-                        for (var item of args) {
-                            result += item;
-                        };
+                        args.forEach(function (element) {
+                            result += element;
+                        })
 
-                        return result / (10 ** pointLength)
+                        return result / (10 ** pointLength);
 
                     }
                 },
@@ -165,7 +172,47 @@
                     desc: "数字相减",
                     exp: "例子： J.sub(1,2,3,...)，返回传参之差",
                     method: function () {
-                        console.log("数字相减")
+
+                        // 传参转化为数组
+                        var args = Array.prototype.slice.call(arguments);
+                        if (args.length == 0) {
+                            return 0
+                        };
+
+                        // 判断是否都为数字（提升体验，提示哪一位是非数字）
+                        for (var i = 0; i < args.length; i++) {
+                            if (Object.prototype.toString.call(args[i]) === "[object String]") {
+                                args[i] = args[i] == "" ? args[i] = 0 : parseFloat(args[i]);
+
+                            };
+                            if (!this.judgeNumber(args[i])) {
+                                throw "arguments[" + (i) + "] is not number";
+                            };
+                        };
+
+                        // 获取小数点位数（10的倍数取值）
+                        var pointLength = 0;
+
+                        for (var i = 0; i < args.length.toString(); i++) {
+                            if (i == 0) {
+                                pointLength = args[i].toString().length;
+                            } else if (args[i].toString().length > pointLength) {
+                                pointLength = args[i].toString().length;
+                            };
+                        };
+
+                        args = args.map(item => item = 10 ** pointLength * item);
+
+                        // 计算结果
+                        var result = args[0];
+
+                        args.forEach(function (element, index) {
+                            if (index > 0) {
+                                result -= element;
+                            };
+                        })
+
+                        return result / (10 ** pointLength);
                     }
                 },
                 // 乘
@@ -173,7 +220,46 @@
                     desc: "数字相乘",
                     exp: "例子： J.mul(1,2,3,...)，返回传参之积",
                     method: function () {
-                        console.log("数字相乘")
+
+                        // 传参转化为数组
+                        var args = Array.prototype.slice.call(arguments);
+                        if (args.length == 0) {
+                            return 0
+                        };
+
+                        // 判断是否都为数字（提升体验，提示哪一位是非数字）
+                        for (var i = 0; i < args.length; i++) {
+                            if (Object.prototype.toString.call(args[i]) === "[object String]") {
+                                args[i] = args[i] == "" ? args[i] = 1 : parseFloat(args[i]);
+                            };
+                            if (!this.judgeNumber(args[i])) {
+                                throw "arguments[" + (i) + "] is not number";
+                            };
+                        };
+
+                        // 获取小数点位数（10的倍数取值）
+                        var pointLength = 0;
+
+                        for (var i = 0; i < args.length.toString(); i++) {
+                            if (i == 0) {
+                                pointLength = args[i].toString().length;
+                            } else if (args[i].toString().length > pointLength) {
+                                pointLength = args[i].toString().length;
+                            };
+                        };
+
+                        args = args.map(item => item = 10 ** pointLength * item);
+
+                        // 计算结果
+                        var result = 1;
+                        var count = 0;
+
+                        args.forEach(function (element) {
+                            count++;
+                            result *= element;
+                        });
+
+                        return result / (10 ** (count * pointLength));
                     }
                 },
                 // 除
@@ -181,7 +267,46 @@
                     desc: "数字相除",
                     exp: "例子： J.divide(1,2,3,...)，返回传参之商",
                     method: function () {
-                        console.log("数字相除")
+
+                        // 传参转化为数组
+                        var args = Array.prototype.slice.call(arguments);
+                        if (args.length == 0) {
+                            return 0
+                        };
+
+                        // 判断是否都为数字（提升体验，提示哪一位是非数字）
+                        for (var i = 0; i < args.length; i++) {
+                            if (Object.prototype.toString.call(args[i]) === "[object String]") {
+                                args[i] = parseFloat(args[i]);
+                            };
+                            if (!this.judgeNumber(args[i])) {
+                                throw "arguments[" + (i) + "] is not number";
+                            };
+                        };
+
+                        // 获取小数点位数（10的倍数取值）
+                        var pointLength = 0;
+
+                        for (var i = 0; i < args.length.toString(); i++) {
+                            if (i == 0) {
+                                pointLength = args[i].toString().length;
+                            } else if (args[i].toString().length > pointLength) {
+                                pointLength = args[i].toString().length;
+                            };
+                        };
+
+                        args = args.map(item => item = 10 ** pointLength * item);
+
+                        // 计算结果
+                        var result = args[0];
+
+                        args.forEach(function (element, index) {
+                            if (index > 0) {
+                                result /= element;
+                            }
+                        });
+
+                        return result;
                     }
                 },
             }
