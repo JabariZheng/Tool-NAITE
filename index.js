@@ -129,16 +129,11 @@
                             return 0
                         };
 
-                        // 判断传入参数是否都为数字，否则抛出异常
+                        // 判断是否都为数字（提升体验，提示哪一位是非数字）
                         for (var i = 0; i < args.length; i++) {
-                            // 作为 0 处理
-                            if (args[i] == undefined || args[i] == null || args[i] == "") {
-                                args[i] = 0;
-                            };
-
-                            if (isNaN(args[i])) {
-                                throw "arguments[" + (i) + "] is not number";
-                            };
+                            if (!this.judgeNumber(args[i])) {
+                                throw "arguments[" + (i) + "]: " + args[i] + " is not number";
+                            }
                         };
 
                         // 获取小数点位数（10的倍数取值）
@@ -164,11 +159,33 @@
                         return result / (10 ** pointLength)
 
                     }
-
-                }
+                },
+                // 减
+                sub: {
+                    desc: "数字相减",
+                    exp: "例子： J.sub(1,2,3,...)，返回传参之差",
+                    method: function () {
+                        console.log("数字相减")
+                    }
+                },
+                // 乘
+                mul: {
+                    desc: "数字相乘",
+                    exp: "例子： J.mul(1,2,3,...)，返回传参之积",
+                    method: function () {
+                        console.log("数字相乘")
+                    }
+                },
+                // 除
+                divide: {
+                    desc: "数字相除",
+                    exp: "例子： J.divide(1,2,3,...)，返回传参之商",
+                    method: function () {
+                        console.log("数字相除")
+                    }
+                },
             }
         }
-
     });
 
     BOOT.J = NAITE;
